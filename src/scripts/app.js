@@ -18360,6 +18360,39 @@ module.exports=require('nakDgH');
 var React  = require('react'),
     cwp    = require('react/lib/cloneWithProps');
 
+var ChildrenA = React.createClass({displayName: "ChildrenA",
+    render : function(){
+        return  (
+            React.createElement("a", {className: "btn btn-danger", onClick: this.props.onHandler}, 
+                this.props.txt
+            )
+        )
+    }
+});
+
+var ChildrenB = React.createClass({displayName: "ChildrenB",
+    render: function(){
+        return(
+            React.createElement("a", {className: "btn btn-primary", onClick: this.props.onHandler}, 
+                this.props.children
+            )
+       )
+     }
+});
+
+var ChildrenC = React.createClass({displayName: "ChildrenC",
+     _onClickHandler:function(){
+       console.log('ChildrenC click handler');
+     },
+     render: function(){
+       return(
+         React.createElement("a", {className: "btn btn-success", onClick: this._onClickHandler}, 
+          "ChildrenC Text"
+         )
+       )
+     }
+});
+
 var Parent = React.createClass({displayName: "Parent",
     getInitialState: function(){
         return{
@@ -18384,31 +18417,14 @@ var Parent = React.createClass({displayName: "Parent",
         return(
             React.createElement("div", null, 
                 chlidrenA, 
-                this.props.children[1]
+                this.props.children[1], 
+                this.props.childrenC()
             )
         );
     }
 });
 
-var ChildrenA = React.createClass({displayName: "ChildrenA",
-    render : function(){
-        return  (
-            React.createElement("a", {className: "btn btn-danger", onClick: this.props.onHandler}, 
-                this.props.txt
-            )
-        )
-    }
-});
 
-var ChildrenB = React.createClass({displayName: "ChildrenB",
-    render: function(){
-        return(
-            React.createElement("a", {className: "btn btn-primary", onClick: this.props.onHandler}, 
-                this.props.children
-            )
-       )
-     }
-});
 
 var Root = React.createClass({displayName: "Root",
     getDefaultProps: function() {
@@ -18432,7 +18448,7 @@ var Root = React.createClass({displayName: "Root",
     },
     render: function(){
         return(
-          React.createElement(Parent, React.__spread({},  this.props), 
+          React.createElement(Parent, React.__spread({},  this.props, {childrenC: ChildrenC}), 
             React.createElement(ChildrenA, null), 
             React.createElement(ChildrenB, {onHandler: this._rootHandler}, 
                this.state.txt
